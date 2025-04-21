@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server";
-// Remove: import { auth } from "@/lib/auth";
 
 export const config = {
   matcher: [

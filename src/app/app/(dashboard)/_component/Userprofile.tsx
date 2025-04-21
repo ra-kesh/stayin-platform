@@ -1,7 +1,10 @@
 "use client";
 import { authClient } from "@/lib/auth/auth-client";
-import Image from "next/image";
+
 import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Import Avatar
+import { Button } from "@/components/ui/button"; // Import Button
+
 type UserProps = {
   id: string;
   email: string;
@@ -27,33 +30,31 @@ export default function UserProfile({ user }: { user: UserProps }) {
     });
   };
   return (
-    <div className="flex items-start gap-5">
-      <div className="flex cursor-pointer items-center">
-        <div>
+    <div className="flex flex-col items-center gap-4 rounded-lg border p-4">
+      {" "}
+      {/* Add some basic structure */}
+      <div className="flex items-center gap-4">
+        <Avatar>
+          {" "}
+          {/* Use shadcn Avatar */}
           {user.image ? (
-            <Image
-              alt={user.name ?? "user image"}
-              src={user.image}
-              className="inline-block h-9 w-9 rounded-full"
-            />
-          ) : (
-            <div className="bg-gray-100 h-10 w-10 rounded-full flex items-center justify-center text-black">
-              {user.name?.charAt(0)}
-            </div>
-          )}
-        </div>
-        <div className="ml-3">
-          <p className="text-sm font-medium text-gray-100 group-hover:text-gray-200">
-            {user.name}
-          </p>
-          <p className="text-xs font-medium text-gray-500 group-hover:text-gray-600">
-            {user.email}
-          </p>
+            <AvatarImage src={user.image} alt={user.name ?? "user image"} />
+          ) : null}
+          <AvatarFallback>
+            {user.name?.charAt(0).toUpperCase() ??
+              user.email?.charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <div className="text-left">
+          <p className="text-sm font-medium">{user.name}</p>
+          <p className="text-xs text-muted-foreground">{user.email}</p>
         </div>
       </div>
-      <button onClick={signOut} className="text-sm text-gray-100">
+      <Button onClick={signOut} variant="outline" size="sm">
+        {" "}
+        {/* Use shadcn Button */}
         Sign out
-      </button>
+      </Button>
     </div>
   );
 }

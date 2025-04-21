@@ -1,9 +1,22 @@
 "use client";
 
-import Link from "next/link";
-import { type SVGProps, useState } from "react";
+// Remove Link and SVGProps imports if no longer needed
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth/auth-client";
+import { Button } from "@/components/ui/button"; // Import shadcn Button
+import { Input } from "@/components/ui/input"; // Import shadcn Input
+import { Label } from "@/components/ui/label"; // Import shadcn Label
+import { Checkbox } from "@/components/ui/checkbox"; // Import shadcn Checkbox
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"; // Import shadcn Card components
+import Link from "next/link"; // Keep Link for sign-up/forgot password
 
 export default function Login() {
   const router = useRouter();
@@ -13,128 +26,104 @@ export default function Login() {
   const [remember, setRemember] = useState(false);
 
   const signIn = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form submission
-    // No need to await here unless you need the result immediately after
+    e.preventDefault();
+    // Use authClient which already uses toast for errors
     authClient.signIn.email(
+      { email, password, rememberMe: remember },
       {
-        email,
-        password,
-        rememberMe: remember,
-      },
-      {
-        onRequest: () => {
-          setLoading(true);
-        },
-        onSuccess: () => {
-          // setLoading(false); // Optional: Set loading false on success if needed before navigation
-          router.push("/");
-        },
-        onError: (ctx) => {
-          setLoading(false);
-          alert(ctx.error.message);
+        onRequest: () => setLoading(true),
+        onSuccess: () => router.push("/"), // Keep setLoading(false) out of onSuccess for redirects
+        onError: () => setLoading(false), // setLoading false only on error
+        // onResponse is called for both success and error after the request finishes
+        onResponse: () => {
+          // Optional: Can also set loading false here if needed after redirect starts or error occurs
+          // setLoading(false);
         },
       }
     );
   };
 
   return (
-    <div className="relative flex min-h-[100dvh] items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="z-10 mx-auto w-full max-w-[500px] text-white">
-        <div className="mb-8 text-center">
-          <h1 className="font-geist text-3xl font-normal tracking-tighter">
-            Welcome back
-          </h1>
-          <p className="font-geist font-normal text-gray-800/90 dark:text-gray-400">
-            Sign in to your account to continue
-          </p>
-        </div>
-        <form className="space-y-4" onSubmit={signIn}> {/* Attach onSubmit here */}
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm/6 font-medium text-white"
-            >
-              Email address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              className="block w-full rounded-md border-0 py-3 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 sm:text-sm/6"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm/6 font-medium text-white"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              className="block w-full rounded-md border-0 py-3 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 sm:text-sm/6"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                onChange={(e) => setRemember(e.target.checked)}
-                className="h-4 w-4 rounded-lg border-gray-300 text-purple-600 focus:ring-purple-600"
+    // Remove the outer div with gradient background
+    // Use flex container to center the card
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-sm">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">Welcome back</CardTitle>
+          <CardDescription>Sign in to your account to continue</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={signIn} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email address</Label>
+              <Input // Use shadcn Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={email} // Controlled component
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                placeholder="name@example.com"
+                disabled={loading}
               />
-              <label
-                htmlFor="remember-me"
-                className="ml-3 block text-sm/6 text-white"
-              >
-                Remember me
-              </label>
             </div>
-
-            <div className="text-sm/6">
-              <a
-                href="/forget-password"
-                className="font-normal text-white hover:text-purple-100"
-              >
-                Forgot password?
-              </a>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input // Use shadcn Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={password} // Controlled component
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                disabled={loading}
+              />
             </div>
-          </div>
-          <button
-            type="submit" // Change type to submit
-            // Remove onClick={signIn} from here
-            disabled={loading} // Disable button while loading
-            className="font-geist relative mx-auto h-12 w-full transform-gpu overflow-hidden rounded bg-neutral-950 bg-purple-200/10 px-5 py-2.5 text-center tracking-tighter text-white transition-all duration-300 hover:bg-neutral-800 hover:bg-transparent/5 hover:ring-2 hover:ring-purple-800 hover:ring-offset-2 hover:ring-offset-zinc-900 active:bg-transparent disabled:opacity-50 dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset]"
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Checkbox // Use shadcn Checkbox
+                  id="remember-me"
+                  checked={remember}
+                  onCheckedChange={(checked) => setRemember(Boolean(checked))}
+                  disabled={loading}
+                />
+                <Label
+                  htmlFor="remember-me"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Remember me
+                </Label>
+              </div>
+              <div className="text-sm">
+                <Link
+                  href="#" // Add actual forgot password link later
+                  className="font-medium text-primary hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {" "}
+              {/* Use shadcn Button */}
+              {loading ? "Signing In..." : "Sign In"}
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter className="text-center text-sm">
+          Don't have an account?{" "}
+          <Link
+            href="/sign-up"
+            className="ml-1 font-medium text-primary hover:underline"
           >
-            {loading ? (
-              <span className="relative">Signing In...</span>
-            ) : (
-              <span className="relative">Sign In</span>
-            )}
-          </button>
-        </form> {/* Button is now inside the form */}
-
-        <div className="mt-6 text-center text-sm">
-          <p className="text-gray-500 dark:text-gray-400">
-            Don&apos;t have an account?
-            <Link
-              className="ml-2 font-medium text-gray-900 underline-offset-4 hover:underline dark:text-gray-500"
-              href="/signup"
-            >
-              Sign up
-            </Link>
-          </p>
-        </div>
-      </div>
+            Sign up
+          </Link>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
+
+// Remove GithubIcon and GoogleIcon components if they existed and are not used
