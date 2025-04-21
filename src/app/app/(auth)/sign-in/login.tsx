@@ -1,13 +1,12 @@
 "use client";
 
-// Remove Link and SVGProps imports if no longer needed
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth/auth-client";
-import { Button } from "@/components/ui/button"; // Import shadcn Button
-import { Input } from "@/components/ui/input"; // Import shadcn Input
-import { Label } from "@/components/ui/label"; // Import shadcn Label
-import { Checkbox } from "@/components/ui/checkbox"; // Import shadcn Checkbox
+import { Button } from "@/components/ui/button"; //
+import { Input } from "@/components/ui/input"; //
+import { Label } from "@/components/ui/label"; //
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Card,
   CardContent,
@@ -15,8 +14,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"; // Import shadcn Card components
-import Link from "next/link"; // Keep Link for sign-up/forgot password
+} from "@/components/ui/card";
+import Link from "next/link";
 
 export default function Login() {
   const router = useRouter();
@@ -27,14 +26,13 @@ export default function Login() {
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Use authClient which already uses toast for errors
+
     authClient.signIn.email(
       { email, password, rememberMe: remember },
       {
         onRequest: () => setLoading(true),
-        onSuccess: () => router.push("/"), // Keep setLoading(false) out of onSuccess for redirects
-        onError: () => setLoading(false), // setLoading false only on error
-        // onResponse is called for both success and error after the request finishes
+        onSuccess: () => router.push("/"),
+        onError: () => setLoading(false), //
         onResponse: () => {
           // Optional: Can also set loading false here if needed after redirect starts or error occurs
           // setLoading(false);
@@ -44,8 +42,6 @@ export default function Login() {
   };
 
   return (
-    // Remove the outer div with gradient background
-    // Use flex container to center the card
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
@@ -56,12 +52,12 @@ export default function Login() {
           <form onSubmit={signIn} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email address</Label>
-              <Input // Use shadcn Input
+              <Input
                 id="email"
                 name="email"
                 type="email"
                 required
-                value={email} // Controlled component
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 placeholder="name@example.com"
@@ -70,12 +66,12 @@ export default function Login() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input // Use shadcn Input
+              <Input
                 id="password"
                 name="password"
                 type="password"
                 required
-                value={password} // Controlled component
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
                 disabled={loading}
@@ -83,7 +79,7 @@ export default function Login() {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Checkbox // Use shadcn Checkbox
+                <Checkbox
                   id="remember-me"
                   checked={remember}
                   onCheckedChange={(checked) => setRemember(Boolean(checked))}
@@ -98,7 +94,7 @@ export default function Login() {
               </div>
               <div className="text-sm">
                 <Link
-                  href="#" // Add actual forgot password link later
+                  href="#"
                   className="font-medium text-primary hover:underline"
                 >
                   Forgot password?
@@ -107,7 +103,6 @@ export default function Login() {
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {" "}
-              {/* Use shadcn Button */}
               {loading ? "Signing In..." : "Sign In"}
             </Button>
           </form>
@@ -125,5 +120,3 @@ export default function Login() {
     </div>
   );
 }
-
-// Remove GithubIcon and GoogleIcon components if they existed and are not used

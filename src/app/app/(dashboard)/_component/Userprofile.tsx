@@ -2,8 +2,8 @@
 import { authClient } from "@/lib/auth/auth-client";
 
 import { useRouter } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Import Avatar
-import { Button } from "@/components/ui/button"; // Import Button
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button"; //
 
 type UserProps = {
   id: string;
@@ -32,11 +32,9 @@ export default function UserProfile({ user }: { user: UserProps }) {
   return (
     <div className="flex flex-col items-center gap-4 rounded-lg border p-4">
       {" "}
-      {/* Add some basic structure */}
       <div className="flex items-center gap-4">
         <Avatar>
           {" "}
-          {/* Use shadcn Avatar */}
           {user.image ? (
             <AvatarImage src={user.image} alt={user.name ?? "user image"} />
           ) : null}
@@ -52,7 +50,6 @@ export default function UserProfile({ user }: { user: UserProps }) {
       </div>
       <Button onClick={signOut} variant="outline" size="sm">
         {" "}
-        {/* Use shadcn Button */}
         Sign out
       </Button>
     </div>
