@@ -17,7 +17,10 @@ export default async function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const hostname = req.headers
     .get("host")!
-    .replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+    .replace(
+      `.localhost:${process.env.PORT || "3000"}`,
+      `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`
+    );
   const searchParams = req.nextUrl.searchParams.toString();
   const path = `${url.pathname}${
     searchParams.length > 0 ? `?${searchParams}` : ""

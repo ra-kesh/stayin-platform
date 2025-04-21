@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { admin, username } from "better-auth/plugins";
 
 export const authClient = createAuthClient({
-  baseURL: "http://app.localhost:3000/api/auth", // Match the frontend origin
+  baseURL: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth`,
   plugins: [organizationClient(), username(), admin()],
   fetchOptions: {
     onError: (ctx) => {

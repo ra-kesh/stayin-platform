@@ -7,6 +7,9 @@ import { nextCookies } from "better-auth/next-js";
 import { getActiveOrganization } from "../db/queries";
 import { cache } from "react";
 import { headers } from "next/headers";
+import { validateEnv } from "../env";
+
+validateEnv();
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -19,8 +22,7 @@ export const auth = betterAuth({
       console.log("Reset password URL:", url);
     },
   },
-  // biome-ignore lint/style/noNonNullAssertion: <explanation>
-  secret: process.env.BETTER_AUTH_SECRET!,
+  secret: process.env.BETTER_AUTH_SECRET as string,
   plugins: [
     username(),
     admin(),
@@ -45,7 +47,6 @@ export const auth = betterAuth({
       },
     },
   },
-  // disabledPaths: ["/sign-up/email", "/sign-in/email"], // Temporarily remove or comment out this line
 });
 
 export const getSession = cache(async () => {
