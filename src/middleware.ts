@@ -7,9 +7,11 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - api/auth (Auth API routes - ADDED EXCLUSION)
+     * - api/webhooks (Example: If you add webhooks later)
      * - Anything containing a '.' (e.g., static assets)
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/|.*\\.).*)", // Modified matcher
   ],
 };
 
@@ -22,19 +24,24 @@ export default async function middleware(req: NextRequest) {
       `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`
     );
   const searchParams = req.nextUrl.searchParams.toString();
+  // Construct the path without the locale prefix if it exists
   const path = `${url.pathname}${
     searchParams.length > 0 ? `?${searchParams}` : ""
   }`;
 
   console.log(`[Middleware] Request: ${req.method} ${hostname}${path}`);
 
+  // Check if the request is for an API route (already excluded by matcher, but good practice)
+  // If you move more APIs outside /app/app, you might adjust this check or rely solely on the matcher
+  if (path.startsWith("/api/")) {
+     console.log("[Middleware] Passing through API request:", path);
+     return NextResponse.next(); // Let API requests pass through without rewrite
+  }
+
+
   // Rewrites for app pages
   if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     console.log(`[Middleware] Matched app subdomain: ${hostname}`);
-
-    // --- Session checking logic removed ---
-
-    // Rewrite *all* paths under the app subdomain to the /app directory
     const rewriteTarget = `/app${path === "/" ? "" : path}`;
     console.log(`[Middleware] Rewriting to URL path: ${rewriteTarget}`);
     const rewriteUrl = req.nextUrl.clone();
