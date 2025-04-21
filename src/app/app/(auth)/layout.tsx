@@ -7,7 +7,9 @@ export default async function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession(); // Check session here
+  const session = await getSession();
+
+  console.log("Session:", session); // Check session here
 
   if (session) {
     redirect("/"); // Redirect if already authenticated

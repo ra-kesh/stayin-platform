@@ -1,4 +1,4 @@
-// Remove this line: import "dotenv/config";
+import "dotenv/config";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth";
 import { db } from "../db/drizzle";
@@ -11,7 +11,17 @@ import { validateEnv } from "../env";
 
 validateEnv();
 
+const allowedOrigins = [
+  "http://app.localhost:3000",
+  "https://app.stayinpuri.com",
+  "https://stayinpuri.com",
+  "http://localhost:3000",
+];
+
+const validOrigins = allowedOrigins.filter(Boolean) as string[];
+
 export const auth = betterAuth({
+  appName: "Stay In Puri",
   database: drizzleAdapter(db, {
     provider: "pg",
     usePlural: true,
@@ -46,6 +56,30 @@ export const auth = betterAuth({
         },
       },
     },
+  },
+
+  trustedOrigins: validOrigins,
+
+  cors: {
+    origin: validOrigins,
+    credentials: true,
+  },
+
+  advanced: {
+    ipAddress: {
+      ipAddressHeaders: ["x-client-ip", "x-forwarded-for"],
+      disableIpTracking: false,
+    },
+    // crossSubDomainCookies: {
+    //   enabled: true,
+    //   domain: `.localhost`,
+    // },
+    // defaultCookieAttributes: {
+    //   secure: true,
+    //   httpOnly: true,
+    //   sameSite: "none", // Allows CORS-based cookie sharing across subdomains
+    //   partitioned: true, // New browser standards will mandate this for foreign cookies
+    // },
   },
 });
 

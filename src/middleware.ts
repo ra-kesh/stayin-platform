@@ -1,4 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
+import { createAuthClient } from "better-auth/client";
 
 export const config = {
   matcher: [
@@ -11,11 +13,25 @@ export const config = {
      * - api/webhooks (Example: If you add webhooks later)
      * - Anything containing a '.' (e.g., static assets)
      */
-    "/((?!_next/static|_next/image|favicon.ico|api/|.*\\.).*)", // Modified matcher
+    "/((?!_next/static|_next/image|favicon.ico|api/|.*\\.).*)",
   ],
 };
 
+const authClient = createAuthClient();
+
 export default async function middleware(req: NextRequest) {
+  const sessionCookie = getSessionCookie(req);
+
+  // const { data: session } = await authClient.getSession({
+  //   fetchOptions: {
+  //     headers: req.headers,
+  //   },
+  // });
+
+  // console.log("[Middleware] Session:", session);
+
+  console.log("[Middleware] Session Cookie:", sessionCookie);
+
   const url = req.nextUrl;
   const hostname = req.headers
     .get("host")!
@@ -31,13 +47,10 @@ export default async function middleware(req: NextRequest) {
 
   console.log(`[Middleware] Request: ${req.method} ${hostname}${path}`);
 
-  // Check if the request is for an API route (already excluded by matcher, but good practice)
-  // If you move more APIs outside /app/app, you might adjust this check or rely solely on the matcher
   if (path.startsWith("/api/")) {
-     console.log("[Middleware] Passing through API request:", path);
-     return NextResponse.next(); // Let API requests pass through without rewrite
+    console.log("[Middleware] Passing through API request:", path);
+    return NextResponse.next(); // Let API requests pass through without rewrite
   }
-
 
   // Rewrites for app pages
   if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
