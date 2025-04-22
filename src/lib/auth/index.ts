@@ -14,8 +14,6 @@ validateEnv();
 const allowedOrigins = [
   "http://app.localhost:3000",
   "https://app.stayinpuri.com",
-  "https://stayinpuri.com",
-  "http://localhost:3000",
 ];
 
 const validOrigins = allowedOrigins.filter(Boolean) as string[];
