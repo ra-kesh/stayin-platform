@@ -37,82 +37,76 @@ import { useSession } from "@/lib/auth/auth-client";
 import { User } from "better-auth";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/app",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
+      title: "Properties",
+      url: "/app/properties",
       icon: IconFolder,
     },
     {
-      title: "Team",
-      url: "#",
+      title: "Bookings",
+      url: "/app/bookings",
+      icon: IconListDetails,
+    },
+    {
+      title: "Calendar",
+      url: "/app/calendar",
+      icon: IconChartBar,
+    },
+    {
+      title: "Staff",
+      url: "/app/staff",
       icon: IconUsers,
     },
   ],
   navClouds: [
     {
-      title: "Capture",
+      title: "Rooms",
       icon: IconCamera,
-      isActive: true,
-      url: "#",
+      url: "/app/rooms",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: "All Rooms",
+          url: "/app/rooms",
         },
         {
-          title: "Archived",
-          url: "#",
+          title: "Room Types",
+          url: "/app/rooms/types",
         },
       ],
     },
     {
-      title: "Proposal",
+      title: "Amenities",
       icon: IconFileDescription,
-      url: "#",
+      url: "/app/amenities",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: "Hotel Amenities",
+          url: "/app/amenities/hotel",
         },
         {
-          title: "Archived",
-          url: "#",
+          title: "Room Amenities",
+          url: "/app/amenities/room",
         },
       ],
     },
     {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
+      title: "Reports",
+      icon: IconReport,
+      url: "/app/reports",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: "Occupancy",
+          url: "/app/reports/occupancy",
         },
         {
-          title: "Archived",
-          url: "#",
+          title: "Revenue",
+          url: "/app/reports/revenue",
         },
       ],
     },
@@ -120,34 +114,24 @@ const data = {
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      url: "/app/settings",
       icon: IconSettings,
     },
     {
-      title: "Get Help",
-      url: "#",
+      title: "Support",
+      url: "/app/support",
       icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
     },
   ],
   documents: [
     {
-      name: "Data Library",
-      url: "#",
+      name: "Guest Directory",
+      url: "/app/guests",
       icon: IconDatabase,
     },
     {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
+      name: "Invoices",
+      url: "/app/invoices",
       icon: IconFileWord,
     },
   ],
@@ -167,7 +151,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <span className="text-base font-semibold">Stay In Puri </span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
