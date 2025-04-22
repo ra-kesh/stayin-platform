@@ -77,6 +77,7 @@ export const organizations = pgTable("organizations", {
   name: text("name").notNull(),
   slug: text("slug").unique(),
   logo: text("logo"),
+  isOnboarded: boolean("is_onboarded").notNull().default(false),
   createdAt: timestamp("created_at").notNull(),
   metadata: text("metadata"),
 });
